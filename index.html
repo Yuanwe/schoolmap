@@ -1,0 +1,101 @@
+<!DOCTYPE html>  
+<html>  
+<head>  
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />  
+	<title>大学地图</title>
+	<script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=Ps0zrX5619HsYcmNTV7UAmUGuoWYBR9E"></script>
+</head>  
+
+<body>
+	<style type="text/css">  
+		html{height:100%}  
+		body{height:100%;}  
+		#container{height:100%;} 
+		.info_ul{
+			margin:0 0 5px 0;
+			padding:0.2em 0;
+		} 
+		.info_li{
+			line-height: 26px;font-size: 15px;
+		}
+		.info_span{
+			width: 50px;display: inline-block;
+		}
+	</style>    
+	<div id="container"></div> 
+	<script type="text/javascript"> 
+		var map = new BMap.Map("container"); //初始化地图
+
+		var points = [
+			{"lng":"119.961774","lat":"31.6897","school":"常州大学","name":"刘莉楠"},
+			{"lng":"121.531261","lat":"38.888106","school":"大连理工大学","name":"乌云格"},
+			{"lng":"121.781719","lat":"39.051128","school":"大连民族大学","name":"周新浩"},
+			{"lng":"113.432316","lat":"23.050468","school":"广东医科大学","name":"欧东"},
+			{"lng":"114.315188","lat":"30.486355","school":"湖北工业大学","name":"何昊宇"},
+			{"lng":"114.313982","lat":"30.484024","school":"湖北工业大学工程技术学院","name":"李欣皓"},
+			{"lng":"114.441704","lat":"30.424382","school":"湖北经济学院","name":"李文卓,李智强"},
+			{"lng":"114.166697","lat":"30.520853","school":"江汉大学","name":"曹培养,毅希"},
+			{"lng":"114.935247","lat":"25.860164","school":"江西理工大学","name":"徐丹 "},
+			{"lng":"116.343706","lat":"39.906724","school":"人民公安大学","name":"朱政"},
+			{"lng":"118.111907","lat":"24.442647","school":"厦门大学","name":"阿力米热"},
+			{"lng":"86.064688","lat":"44.309995","school":"石河子大学","name":"胡艳玲"},
+			{"lng":"106.614282","lat":"29.670271","school":"四川外国语大学重庆南方翻译学院","name":"李采洋"},
+			{"lng":"114.368107","lat":"30.543083","school":"武汉大学","name":"关涛"},
+			{"lng":"114.405712","lat":"30.491494","school":"武汉纺织大学","name":"赵滕山,党雅婷"},
+			{"lng":"114.246907","lat":"30.642734","school":"武汉轻工大学","name":"潘登"},
+			{"lng":"108.839981","lat":"34.289547","school":"武警工程大学","name":"张焱"},
+			{"lng":"87.626856","lat":"43.771185","school":"新疆大学","name":"赵莉,张瀚珑,魏宇,咏春,张甜"},
+			{"lng":"87.574852","lat":"43.898322","school":"新疆警察学院","name":"刘灿"},
+			{"lng":"87.57342","lat":"43.819605","school":"新疆农业大学","name":"张贻焜,张聪"},
+			{"lng":"87.586193","lat":"43.84328","school":"新疆医科大学","name":"阿木吉特,贺新瑜,张洪庆,马西智"},
+			{"lng":"87.599119","lat":"43.838903","school":"伊犁师范大学","name":"徐梦辉 "},
+			{"lng":"108.911429","lat":"34.376742","school":"长安大学","name":"孙喆"},
+			{"lng":"125.286634","lat":"43.86152","school":"长春工程学院","name":"贾潇雨"},
+			{"lng":"112.220606","lat":"30.33999","school":"长江大学","name":"佳珍"},
+			{"lng":"117.15175","lat":"34.220392","school":"中国矿业大学","name":"哈山"},
+			{"lng":"106.585459","lat":"29.509589","school":"重庆工商大学","name":"张若璇"},
+			{"lng":"106.418855","lat":"29.97492","school":"重庆人文科技学院","name":"周敏"}
+			];//数据准备
+
+		map.centerAndZoom(new BMap.Point(103.388611,35.563611), 6);//设置中心点和显示级别。中国。
+		
+		map.enableScrollWheelZoom();//滚轮放大缩小。
+		map.enablePinchToZoom();
+		map.enableKeyboard();
+		map.setMapType(BMAP_NORMAL_MAP);
+		map.addControl(new BMap.NavigationControl()); 
+		addMarker(points);//添加标注。
+
+		function addMarker(points){  // 创建图标对象   
+			var point,marker;
+			// 创建标注对象并添加到地图   
+			for(var i = 0,pointsLen = points.length;i <pointsLen;i++){
+				point = new BMap.Point(points[i].lng,points[i].lat);	
+				marker = new BMap.Marker(point);   
+				map.addOverlay(marker); 
+				//给标注点添加点击事件。使用立即执行函数和闭包
+				(function() {
+					var thePoint = points[i];
+					marker.addEventListener("click",function(){
+						showInfo(this,thePoint);
+					});
+				})();
+			}
+		}
+
+		//显示信息窗口，显示标注点的信息。
+		function showInfo(thisMaker,point){
+			var sContent =
+			'<ul class="info_ul">'
+			+'<li class="info_li">'
+			+'<span class="info_span">学校：</span>' + point.school + '</li>'
+			+'<li class="info_li">'
+			+'<span class="info_span">人员：</span>' + point.name + '</li>'
+			+'</ul>';
+			var infoWindow = new BMap.InfoWindow(sContent,{enableMessage: false,enableCloseOnClick:false});// 创建信息窗口对象
+		   	thisMaker.openInfoWindow(infoWindow);//图片加载完毕重绘infowindow
+		   }
+
+		</script>  
+	</body>  
+	</html>
